@@ -5,34 +5,33 @@ Rotate the image by 90 degrees (clockwise).
 Follow up:
 Could you do this in-place?*/
 
+import java.util.Arrays;
+
 public class Solution {
     public void rotate(int[][] matrix) {
-        // two setps
-        
-        // first step: switch matrix[i][j] and matrix[j][i] 
-        if(matrix == null) {
-            return; 
-        }
-        int x = matrix.length; 
-        if (x == 0) {
-            return; 
-        }
-        int y = matrix[0].length; 
-        for(int i = 0; i < x; i++) {
-            for(int j = 0; j <= i; j++) {
-                int tmp = matrix[i][j]; 
-                matrix[i][j] = matrix[j][i]; 
+        for(int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < i; j++) {
+                int tmp = matrix[i][j];
+                matrix[i][j] = matrix[j][i];
                 matrix[j][i] = tmp;
             }
         }
-        
-        // second step: mirror the matrix 
-        for(int j = 0; j < y / 2; j++) {
-            for(int i = 0; i < x; i++) {
-                int tmp = matrix[i][j]; 
-                matrix[i][j] = matrix[i][y - j - 1]; 
-                matrix[i][y - j - 1] = tmp;
+
+        for(int i = 0; i < matrix.length; i++) {
+            for(int j = 0; j < matrix[i].length / 2; j++) {
+                int tmp = matrix[i][j];
+                matrix[i][j] = matrix[i][matrix.length - 1 - j];
+                matrix[i][matrix.length - 1 - j] = tmp;
             }
+        }
+    }
+
+    public static void main(String[] args) {
+        com.company.Solution s = new com.company.Solution();
+        int[][] maxtrix = {{1,2}, {3, 4}};//{{1,2,3}, {4, 5, 6}, {7, 8, 9}};
+        s.rotate(maxtrix);
+        for(int i = 0; i < maxtrix.length; i++) {
+            System.out.println(Arrays.toString(maxtrix[i]));
         }
     }
 }

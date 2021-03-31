@@ -10,23 +10,16 @@ public class Solution {
         // grid is equal to the sum of unique paths from left grid
         // and upper grid to it
         // so grid[m][n] = grid[m-1][n] + grid[m][n-1]
-        
+
         int[][] grid = new int[m][n];
-        int i, j;
-        
-        for(i = 0; i < m; i++) {
-            grid[i][0] = 1;
-        }
-        
-        for(j = 0; j < n; j++) {
-            grid[0][j] = 1;
-        }
-        
-        for(i = 1; i < m; i++) 
-            for(j = 1; j < n; j++) {
-                grid[i][j] = grid[i-1][j] + grid[i][j-1];
+        grid[0][0] = 1;
+        for(int i = 0; i < m; i++) {
+            for(int j = 0; j < n; j++) {
+                grid[i][j] += (i - 1 >= 0 ? grid[i - 1][j] : 0);
+                grid[i][j] += (j - 1 >= 0 ? grid[i][j - 1] : 0);
             }
-        return grid[m-1][n-1];
+        }
+        return grid[m- 1][n - 1];
     }
     /* may pass the small test case, but time limit erro for large test case
     public class node {
