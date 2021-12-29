@@ -41,25 +41,45 @@ After calling your function, the tree should look like:
  *     TreeLinkNode(int x) { val = x; }
  * }
  */
+
+package com.company;
+
+import java.util.*;
+
 public class Solution {
-    public void connect(TreeLinkNode root) {
-        TreeLinkNode result = root; 
-        TreeLinkNode next = root; 
-        TreeLinkNode cur = null;
-        TreeLinkNode child = null; 
-        while(next != null) {
-            cur = next; 
-            child = next.left; 
-            next = next.left; 
-            while(cur != null && child != null) {
-                if(child != cur.left) {
-                    child.next = cur.left; 
-                    child = child.next; 
-                }
-                child.next = cur.right;
-                child = child.next;
-                cur = cur.next; 
+    class Node {
+        public int val;
+        public Node left;
+        public Node right;
+        public Node next;
+
+        public Node() {}
+
+        public Node(int _val) {
+            val = _val;
+        }
+
+        public Node(int _val, Node _left, Node _right, Node _next) {
+            val = _val;
+            left = _left;
+            right = _right;
+            next = _next;
+        }
+    }
+
+    public Node connect(Node root) {
+        Node cur = root;
+        Node curLevelFirst = root;
+        while(cur!= null && cur.left != null && cur.right != null) {
+            cur.left.next = cur.right;
+            if (cur.next != null) {
+                cur.right.next = cur.next.left;
+                cur = cur.next;
+            } else {
+                cur = curLevelFirst.left;
+                curLevelFirst = cur;
             }
         }
+        return  root;
     }
 }

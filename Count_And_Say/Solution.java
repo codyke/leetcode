@@ -1,45 +1,58 @@
-/*The count-and-say sequence is the sequence of integers beginning as follows:
-1, 11, 21, 1211, 111221, ...
-
-1 is read off as "one 1" or 11.
-11 is read off as "two 1s" or 21.
-21 is read off as "one 2, then one 1" or 1211.
-
-Given an integer n, generate the nth sequence.
-
-Note: The sequence of integers will be represented as a string. */
+package com.company;
 
 import java.util.*;
-public class Solution {
+
+/**
+ The count-and-say sequence is a sequence of digit strings defined by the recursive formula:
+
+ countAndSay(1) = "1"
+ countAndSay(n) is the way you would "say" the digit string from countAndSay(n-1), which is then converted into a different digit string.
+ Example 1:
+
+ Input: n = 1
+ Output: "1"
+ Explanation: This is the base case.
+ Example 2:
+
+ Input: n = 4
+ Output: "1211"
+ Explanation:
+ countAndSay(1) = "1"
+ countAndSay(2) = say "1" = one 1 = "11"
+ countAndSay(3) = say "11" = two 1's = "21"
+ countAndSay(4) = say "21" = one 2 + one 1 = "12" + "11" = "1211"
+ */
+class Solution {
     public String countAndSay(int n) {
-        String result = ""; 
-        String start = "1"; 
-        result = start; 
-        while(--n > 0) {
-            int strLen = start.length(); 
-            int index = 0; 
-            int repeat = 0; 
-            int curNum = 0;
-            result = "";
-            for(index = 0; index < strLen; index++) {
-                if (repeat == 0) {
-                    curNum = Character.getNumericValue(start.charAt(index)); 
-                    repeat++; 
-                } else if(curNum != 
-                            Character.getNumericValue(start.charAt(index))){
-                    // hit a new number
-                    // flash out
-                    result += Integer.toString(repeat) + Integer.toString(curNum); 
-                    repeat = 1; 
-                    curNum = Character.getNumericValue(start.charAt(index)); 
-                } else {
-                    repeat++;
-                }
-            }
-            // flash out
-            result += Integer.toString(repeat) + Integer.toString(curNum); 
-            start = result; 
+        if (n == 1) {
+            return "1";
         }
-        return result; 
+        String s = "1";
+        for(int i = 1; i < n; i++) {
+            s = helper(s);
+        }
+        return s;
+    }
+
+    public String helper(String s) {
+        StringBuilder pre = new StringBuilder();
+        int count = 1;
+        char c = s.charAt(0);
+        for(int i = 1; i < s.length(); i++) {
+            if(s.charAt(i) != c) {
+                pre.append(count).append(c);
+                count = 1;
+                c = s.charAt(i);
+            } else {
+                count++;
+            }
+        }
+        pre.append(count).append(c);
+        return pre.toString();
+    }
+
+    public static void main(String[] str) {
+        Solution s = new Solution();
+        System.out.println(s.countAndSay(5));
     }
 }

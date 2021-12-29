@@ -1,3 +1,10 @@
+package com.company;
+
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.List;
+
 /*
 Given a binary tree, return the zigzag level order traversal of its nodes' values. (ie, from left to right, then right to left for the next level and alternate between).
 
@@ -30,42 +37,32 @@ return its zigzag level order traversal as:
  */
 public class Solution {
     public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
-        List<List<Integer>> result = new ArrayList<List<Integer>>(); 
-        List<TreeNode> curLevel = new ArrayList<TreeNode>(); 
-        List<TreeNode> nextLevel = new ArrayList<TreeNode>(); 
-        boolean reverse = false; 
-        if(root == null) {
-            return result; 
+        List<List<Integer>> result = new ArrayList<>();
+        Deque<TreeNode> deque = new ArrayDeque<>();
+        boolean leftToRight = true;
+        if(root != null) {
+            deque.add(root);
         }
-        curLevel.add(root); 
-        List<Integer> subResult = new ArrayList<Integer>(); 
-        while(!curLevel.isEmpty()) {
-            TreeNode n = curLevel.get(0); 
-            subResult.add(n.val); 
-            if(n.left != null) {
-                nextLevel.add(n.left); 
-            }
-            if(n.right != null) {
-                nextLevel.add(n.right); 
-            }
-            curLevel.remove(0); 
-            if(curLevel.isEmpty()) {
-                if(reverse) {
-                    Collections.reverse(subResult); 
-                    result.add(subResult); 
+        while(!deque.isEmpty()) {
+            // let's deal with level by level
+            List<Integer> levelResult = new ArrayList<>();
+            int num = deque.size();
+            for(int i = 0; i < num; i++) {
+                TreeNode node = deque.pop();
+                if (leftToRight) {
+                    levelResult.add(node.val);
                 } else {
-                    result.add(subResult); 
+                    levelResult.add(0, node.val);
                 }
-                reverse = !reverse; 
-                subResult = new ArrayList<Integer>(); 
-                if(nextLevel.isEmpty()) {
-                    break;
-                } else {
-                    List<TreeNode> tmp = curLevel; 
-                    curLevel = nextLevel; 
-                    nextLevel = tmp; 
+                if(node.left != null) {
+                    deque.add(node.left);
+                }
+                if(node.right != null) {
+                    deque.add(node.right);
                 }
             }
+            result.add(levelResult);
+            leftToRight = !leftToRight;
         }
         return result;
     }

@@ -1,69 +1,63 @@
-/*You are given two linked lists representing two non-negative numbers. The digits are stored in reverse order and each of their nodes contain a single digit. Add the two numbers and return it as a linked list.
+package com.company;
 
-Input: (2 -> 4 -> 3) + (5 -> 6 -> 4)
-Output: 7 -> 0 -> 8*/
+import java.util.*;
 
 /**
- * Definition for singly-linked list.
- * public class ListNode {
- *     int val;
- *     ListNode next;
- *     ListNode(int x) {
- *         val = x;
- *         next = null;
- *     }
- * }
+ Given the head of a linked list, remove the nth node from the end of the list and return its head.
+
+ Follow up: Could you do this in one pass?
+
+
+
+ Example 1:
+
+
+ Input: head = [1,2,3,4,5], n = 2
+ Output: [1,2,3,5]
+ Example 2:
+
+ Input: head = [1], n = 1
+ Output: []
+ Example 3:
+
+ Input: head = [1,2], n = 1
+ Output: [1]
  */
-public class Solution {
+
+
+class Solution {
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-        int carry = 0; 
-        ListNode result = new ListNode(0); 
-        ListNode head = result; 
-        ListNode left = null;
-        while(l1 != null && l2 != null){
-            ListNode node = new ListNode(0); 
-            node.val = l1.val + l2.val + carry; 
-            if(node.val >= 10) {
-                node.val -= 10; 
-                carry = 1; 
-            } else {
-                carry = 0; 
-            }
-            l1 = l1.next;
-            l2 = l2.next; 
-            if(result.next == null) {
-                result.next = node; 
-            }
-            head.next = node; 
-            head = head.next; 
+        ListNode sum = new ListNode(0);
+        ListNode p1 = l1;
+        ListNode p2 = l2;
+        int carry = 0;
+        ListNode cur = sum;
+        while (p1 != null && p2 != null) {
+            int twoSum = p1.val + p2.val + carry;
+            carry = twoSum / 10;
+
+            ListNode n = new ListNode(twoSum % 10);
+            cur.next = n;
+            cur = n;
+            p1 = p1.next;
+            p2= p2.next;
         }
-        if(l1 != null) {
-            left = l1; 
-        } else {
-            left = l2; 
+
+        ListNode r = p1 == null ? p2 : p1;
+        while(r != null) {
+            int twoSum = r.val + carry;
+            carry = twoSum / 10;
+            ListNode n = new ListNode(twoSum % 10);
+            cur.next = n;
+            cur = n;
+            r = r.next;
         }
-        while(left != null) {
-            ListNode node = new ListNode(0); 
-            node.val = left.val + carry; 
-            if(node.val >= 10) {
-                node.val -= 10; 
-                carry = 1; 
-            } else {
-                carry = 0; 
-            }
-            if(result.next == null) {
-                result.next = node; 
-            }
-            head.next = node; 
-            head = head.next; 
-            left = left.next; 
-        } 
-        
-        if(carry != 0) {
-            ListNode node = new ListNode(carry); 
-            head.next = node; 
-            head = head.next; 
+
+        if(carry > 0) {
+            ListNode n = new ListNode(carry);
+            cur.next = n;
         }
-        return result.next; 
+
+        return  sum.next;
     }
 }

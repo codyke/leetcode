@@ -1,59 +1,62 @@
-/*Given a matrix of m x n elements (m rows, n columns), return all elements of the matrix in spiral order.
+package com.company;
 
-For example,
-Given the following matrix:
+import java.util.*;
 
-[
- [ 1, 2, 3 ],
- [ 4, 5, 6 ],
- [ 7, 8, 9 ]
-]
+/**
+ Given an m x n matrix, return all elements of the matrix in spiral order.
 
-You should return [1,2,3,6,9,8,7,4,5]. */
 
-public class Solution {
+
+ Example 1:
+
+
+ Input: matrix = [[1,2,3],[4,5,6],[7,8,9]]
+ Output: [1,2,3,6,9,8,7,4,5]
+ Example 2:
+
+
+ Input: matrix = [[1,2,3,4],[5,6,7,8],[9,10,11,12]]
+ Output: [1,2,3,4,8,12,11,10,9,5,6,7]
+ */
+
+
+class Solution {
     public List<Integer> spiralOrder(int[][] matrix) {
-        List<Integer> result = new ArrayList<Integer>(); 
-        int m = matrix.length; 
-        int n = 0;
-        if(m != 0) {
-            n = matrix[0].length; 
-        }
-        if(m == 0 || n == 0) {
-            return result; 
-        }
-        
-        int stepX = m; 
-        int stepY = n; 
-        int startX = 0; 
-        int startY = 0; 
-        while(stepX > 0 && stepY > 0) {
-            int i = startX; 
-            int j = startY; 
-            for(; j < stepY + startY; j++) {
-                result.add(matrix[i][j]); 
+        int minRow = 0;
+        int maxRow = matrix.length - 1;
+        int minCol = 0;
+        int maxCol = matrix[0].length - 1;
+        List<Integer> result = new ArrayList<>();
+
+        do {
+            int curCol = minCol;
+            while(curCol <= maxCol && minRow <= maxRow) {
+                result.add(matrix[minRow][curCol]);
+                curCol++;
             }
-            j--;
-            for(i++; i < stepX + startX; i++) {
-                result.add(matrix[i][j]);
+            minRow++;
+
+            int curRow = minRow;
+            while(curRow <= maxRow && minCol <= maxCol) {
+                result.add(matrix[curRow][maxCol]);
+                curRow++;
             }
-            i--; 
-            for(j--; j >= startY; j--) {
-                if(i != startX) {
-                    result.add(matrix[i][j]); 
-                }
+            maxCol--;
+
+            curCol = maxCol;
+            while(curCol >= minCol && minRow <= maxRow) {
+                result.add(matrix[maxRow][curCol]);
+                curCol--;
             }
-            j++; 
-            for(i--; i > startX; i--) {
-                if(!(j == startY && stepY == 1)) {
-                    result.add(matrix[i][j]);
-                }
+            maxRow--;
+
+            curRow = maxRow;
+            while(curRow >= minRow && minCol <= maxCol) {
+                result.add(matrix[curRow][minCol]);
+                curRow--;
             }
-            startX++;
-            startY++; 
-            stepX -= 2; 
-            stepY -= 2; 
-        }
+            minCol++;
+        } while(maxRow >= minRow && maxCol >= minCol);
         return result;
     }
 }

@@ -1,45 +1,86 @@
-/*Divide two integers without using multiplication, division and mod operator. */
-public class Solution {
+package com.company;
+
+import java.util.*;
+
+/**
+ Given two integers dividend and divisor, divide two integers without using multiplication, division, and mod operator.
+
+ Return the quotient after dividing dividend by divisor.
+
+ The integer division should truncate toward zero, which means losing its fractional part. For example, truncate(8.345) = 8 and truncate(-2.7335) = -2.
+
+ Note: Assume we are dealing with an environment that could only store integers within the 32-bit signed integer range: [−231, 231 − 1]. For this problem, assume that your function returns 231 − 1 when the division result overflows.
+
+
+
+ Example 1:
+
+ Input: dividend = 10, divisor = 3
+ Output: 3
+ Explanation: 10/3 = truncate(3.33333..) = 3.
+ Example 2:
+
+ Input: dividend = 7, divisor = -3
+ Output: -2
+ Explanation: 7/-3 = truncate(-2.33333..) = -2.
+ Example 3:
+
+ Input: dividend = 0, divisor = 1
+ Output: 0
+ Example 4:
+
+ Input: dividend = 1, divisor = 1
+ Output: 1
+ */
+
+class Solution {
     public int divide(int dividend, int divisor) {
-        int result = 0; 
-        int sign = 0; 
-        long tmp = 0;  
-        long sum = 0;
-        int intermediaResult = 0; 
-        long udivisor = divisor;
-        long udividend = dividend; 
-        if (dividend == 0) {
-            return 0; 
+        int sign = 1;
+        if ((dividend < 0 && divisor > 0) || (dividend > 0 && divisor < 0)) {
+            sign = -1;
         }
-        if (divisor == 1) {
-            return dividend; 
+        long dividendL = dividend;
+        long divisorL = divisor;
+        dividendL = dividendL < 0 ? -dividendL : dividendL;
+        divisorL = divisorL < 0 ? -divisorL : divisorL;
+        if(dividendL == 0 || dividendL < divisorL) {
+            return 0;
         }
-        
-        if (divisor < 0 && dividend > 0) {
-            sign = 1; 
-            udivisor = -udivisor; 
-        } else if(dividend < 0 && divisor > 0) {
-            sign = 1; 
-            udividend = -udividend;
-        } else if(dividend < 0 && divisor < 0) {
-            udividend = -udividend; 
-            udivisor = -udivisor;
-        }
-        while ((sum + udivisor) <= udividend) {
-            tmp = udivisor;
-            intermediaResult = 1;
-            while((sum + tmp) <= udividend) {
-                sum += tmp; 
-                result += intermediaResult; 
-                tmp += tmp; 
-                intermediaResult += intermediaResult;
+        int num = 1;
+        long sum = divisorL;
+        long d = divisorL;
+        long result = 1;
+        while(sum < dividendL) {
+            sum += d;
+            if (sum == dividendL) {
+                result += num;
+                break;
+            } else if (sum > dividendL) {
+                if (num <= 1) {
+                    break;
+                }
+                sum -= d;
+                d = divisorL;
+                num = 1;
+            } else {
+                result += num;
+                d += d;
+                num += num;
             }
         }
 
-        if (sign == 1) {
-            return -result;
-        } else {
-            return result; 
+        result = sign == -1 ? -result : result;
+        if (result > Integer.MAX_VALUE) {
+            result = Integer.MAX_VALUE;
         }
+        if (result < Integer.MIN_VALUE) {
+            result = Integer.MIN_VALUE;
+        }
+        return (int)result;
+    }
+
+    public static void main(String[] args) {
+        Solution s = new Solution();
+        System.out.println(s.divide(-2147483648,-1));
     }
 }
